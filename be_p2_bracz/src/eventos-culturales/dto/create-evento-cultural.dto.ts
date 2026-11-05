@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CategoriaEvento } from '../enums/categoria-evento.enum';
 import { Transform } from 'class-transformer';
 import {
   IsDateString,
@@ -54,4 +55,11 @@ export class CreateEventoCulturalDto {
   @IsNotEmpty({ message: 'El estado es obligatorio' })
   @IsEnum(EstadoEvento, { message: 'El estado debe ser Programado, Agotado o Cancelado' })
   readonly estado: EstadoEvento;
+  
+  @ApiProperty({ enum: CategoriaEvento, example: CategoriaEvento.CONCIERTO })
+  @IsNotEmpty({ message: 'La categoría es obligatoria' })
+  @IsEnum(CategoriaEvento, {
+  message: 'La categoría debe ser Concierto, Teatro, Danza o Festival',
+})
+readonly categoria: CategoriaEvento;
 }

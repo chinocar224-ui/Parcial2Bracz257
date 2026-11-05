@@ -22,6 +22,7 @@ const eventosFiltrados = computed(() => {
       evento.titulo.toLowerCase().includes(texto) ||
       evento.artistaPrincipal.toLowerCase().includes(texto) ||
       evento.recinto.nombre.toLowerCase().includes(texto) ||
+      evento.categoria.toLowerCase().includes(texto) ||
       evento.estado.toLowerCase().includes(texto),
   )
 })
@@ -70,7 +71,7 @@ defineExpose({ obtenerLista })
       <InputText
         v-model="busqueda"
         type="text"
-        placeholder="Buscar por título, artista, recinto o estado"
+        placeholder="Buscar por título, artista, recinto, categoría o estado"
       />
     </InputGroup>
     <div class="table-responsive">
@@ -79,6 +80,7 @@ defineExpose({ obtenerLista })
           <tr>
             <th>Nro.</th>
             <th>Título</th>
+            <th>Categoría</th>
             <th>Artista principal</th>
             <th>Recinto</th>
             <th>Fecha</th>
@@ -92,6 +94,7 @@ defineExpose({ obtenerLista })
           <tr v-for="(evento, index) in eventosFiltrados" :key="evento.id">
             <td>{{ index + 1 }}</td>
             <td>{{ evento.titulo }}</td>
+            <td>{{ evento.categoria }}</td>
             <td>{{ evento.artistaPrincipal }}</td>
             <td>{{ evento.recinto.nombre }} ({{ evento.recinto.ciudad }})</td>
             <td>{{ formatearFecha(evento.fechaEvento) }}</td>
@@ -114,7 +117,7 @@ defineExpose({ obtenerLista })
             </td>
           </tr>
           <tr v-if="eventosFiltrados.length === 0">
-            <td colspan="9">No se encontraron resultados</td>
+            <td colspan="10">No se encontraron resultados</td>
           </tr>
         </tbody>
       </table>

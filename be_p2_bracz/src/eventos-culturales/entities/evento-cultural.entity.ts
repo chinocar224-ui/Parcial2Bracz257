@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Recinto } from '../../recintos/entities/recinto.entity';
 import { EstadoEvento } from '../enums/estado-evento.enum';
+import { CategoriaEvento } from '../enums/categoria-evento.enum';
 import { decimalTransformer } from '../../common/transformers/decimal.transformer';
 
 @Entity('eventos_culturales')
@@ -39,6 +40,9 @@ export class EventoCultural {
 
   @Column('date', { name: 'fecha_evento' })
   fechaEvento: string;
+
+  @Column('varchar', { length: 20, default: CategoriaEvento.CONCIERTO })
+  categoria: CategoriaEvento;
 
   @Column('varchar', { length: 20 })
   estado: EstadoEvento;

@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import http from '@/plugins/axios'
 import { Button, DatePicker, Dialog, InputNumber, InputText, Select } from 'primevue'
-import { ESTADOS_EVENTO, type Evento } from '@/models/evento'
+import { CATEGORIAS_EVENTO, ESTADOS_EVENTO, type Evento } from '@/models/evento'
 import type { Recinto } from '@/models/recinto'
 
 interface EventoForm {
@@ -13,6 +13,7 @@ interface EventoForm {
   duracionMinutos: number | null
   precioEntrada: number | null
   fechaEvento: Date | null
+  categoria: string | null
   estado: string | null
 }
 
@@ -27,6 +28,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['guardar', 'close'])
 
+const hoy = new Date()
+
 const vacio = (): EventoForm => ({
   idRecinto: null,
   titulo: '',
@@ -34,6 +37,7 @@ const vacio = (): EventoForm => ({
   duracionMinutos: null,
   precioEntrada: null,
   fechaEvento: null,
+  categoria: null,
   estado: null,
 })
 const evento = ref<EventoForm>(vacio())
@@ -76,6 +80,7 @@ watch(
           duracionMinutos: props.evento.duracionMinutos,
           precioEntrada: props.evento.precioEntrada,
           fechaEvento: textoADate(props.evento.fechaEvento),
+          categoria: props.evento.categoria,
           estado: props.evento.estado,
         }
       } else {
@@ -94,6 +99,7 @@ async function handleSave() {
       duracionMinutos: evento.value.duracionMinutos,
       precioEntrada: evento.value.precioEntrada,
       fechaEvento: evento.value.fechaEvento ? dateATexto(evento.value.fechaEvento) : null,
+      categoria: evento.value.categoria,
       estado: evento.value.estado,
     }
     if (props.modoEdicion) {
@@ -182,7 +188,18 @@ async function handleSave() {
           v-model="evento.fechaEvento"
           class="flex-auto"
           dateFormat="dd/mm/yy"
+          :minDate="hoy"
           showIcon
+        />
+      </div>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="categoria" class="font-semibold w-4">Categoría</label>
+        <Select
+          id="categoria"
+          v-model="evento.categoria"
+          :options="CATEGORIAS_EVENTO"
+          placeholder="Seleccione una categoría"
+          class="flex-auto"
         />
       </div>
       <div class="flex items-center gap-4 mb-4">
